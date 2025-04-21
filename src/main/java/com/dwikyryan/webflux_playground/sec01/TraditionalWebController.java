@@ -17,9 +17,9 @@ import reactor.core.publisher.Flux;
 @Slf4j
 public class TraditionalWebController {
     private final RestClient restClient = RestClient.builder()
-    .requestFactory(new JdkClientHttpRequestFactory())
-    .baseUrl("http://localhost:7070")
-    .build();
+            .requestFactory(new JdkClientHttpRequestFactory())
+            .baseUrl("http://localhost:3000")
+            .build();
 
     @GetMapping("products")
     public List<Product> getProducts() {
@@ -30,11 +30,11 @@ public class TraditionalWebController {
 
                 });
         log.info("received response: {}", list);
-        return list;       
+        return list;
     }
 
     // Not reactive programming
-    @GetMapping("products")
+    @GetMapping("products2")
     public Flux<Product> getProducts2() {
         var list = this.restClient.get()
                 .uri("/demo1/products")
@@ -43,6 +43,6 @@ public class TraditionalWebController {
 
                 });
         log.info("received response: {}", list);
-        return Flux.fromIterable(list);       
+        return Flux.fromIterable(list);
     }
 }

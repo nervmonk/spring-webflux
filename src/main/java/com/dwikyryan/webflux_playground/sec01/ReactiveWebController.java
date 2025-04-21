@@ -14,7 +14,7 @@ import reactor.core.publisher.Flux;
 @Slf4j
 public class ReactiveWebController {
     private final WebClient webClient = WebClient.builder()
-            .baseUrl("http://localhost:7070")
+            .baseUrl("http://localhost:3000")
             .build();
 
     @GetMapping("product")
