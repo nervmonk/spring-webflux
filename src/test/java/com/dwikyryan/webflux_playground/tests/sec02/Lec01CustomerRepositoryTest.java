@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.dwikyryan.webflux_playground.sec02.entity.Customer;
 import com.dwikyryan.webflux_playground.sec02.repository.CustomerRepository;
 
 import lombok.extern.slf4j.Slf4j;
@@ -54,5 +55,46 @@ class Lec01CustomerRepositoryTest extends AbstractTest {
                 .assertNext(c -> Assertions.assertEquals("jake", c.getName()))
                 .expectComplete()
                 .verify();
+    }
+
+    @Test
+    void insertAndDeleteCustomer() {
+        // insert
+        var customer = new Customer();
+        customer.setName("ryan");
+        customer.setEmail("ryan@gmail.com");
+        this.customerRepository.save(customer)
+                .doOnNext(c -> log.info("{}", c))
+                .as(StepVerifier::create)
+                .assertNext(c -> Assertions.assertNotNull(c.getId()))
+                .expectComplete()
+                .verify();
+
+        // count
+        this.customerRepository.count()
+                .as(StepVerifier::create)
+                .expectNext(11L)
+                .expectComplete()
+                .verify();
+
+        this.customerRepository.deleteById(11)
+                .then(this.customerRepository.count())
+                .as(StepVerifier::create)
+                .expectNext(10L)
+                .expectComplete()
+                .verify();
+    }
+
+    @Test
+    void updateCustomer() {
+        this.customerRepository.findByName("ethan")
+                .doOnNext(c -> c.setName("noel"))
+                .flatMap(c -> this.customerRepository.save(c))
+                .doOnNext(c -> log.info("{}", c))
+                .as(StepVerifier::create)
+                .assertNext(c -> Assertions.assertNotEquals("ethan", c.getName()))
+                .expectComplete()
+                .verify();
+
     }
 }
