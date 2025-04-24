@@ -1,4 +1,4 @@
-package com.dwikyryan.webflux_playground.sec04.controller;
+package com.dwikyryan.webflux_playground.sec05.controller;
 
 import java.util.List;
 
@@ -8,15 +8,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dwikyryan.webflux_playground.sec04.dto.CustomerDto;
-import com.dwikyryan.webflux_playground.sec04.exceptions.ApplicationException;
-import com.dwikyryan.webflux_playground.sec04.service.CustomerService;
-import com.dwikyryan.webflux_playground.sec04.validator.RequestValidator;
+import com.dwikyryan.webflux_playground.sec05.dto.CustomerDto;
+import com.dwikyryan.webflux_playground.sec05.exceptions.ApplicationException;
+import com.dwikyryan.webflux_playground.sec05.filter.Category;
+import com.dwikyryan.webflux_playground.sec05.service.CustomerService;
+import com.dwikyryan.webflux_playground.sec05.validator.RequestValidator;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -33,7 +35,8 @@ public class CustomerController {
     }
 
     @GetMapping
-    public Flux<CustomerDto> allCustomers() {
+    public Flux<CustomerDto> allCustomers(@RequestAttribute("category") Category category) {
+        System.out.println(category);
         return this.customerService.getAllCustomers();
     }
 
