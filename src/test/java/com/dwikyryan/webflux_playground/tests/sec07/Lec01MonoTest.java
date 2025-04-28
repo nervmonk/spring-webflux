@@ -7,11 +7,11 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import com.dwikyryan.webflux_playground.tests.sec07.dto.Product;
 
-public class Lec01MonoTest extends AbstractWebClient {
+class Lec01MonoTest extends AbstractWebClient {
     private final WebClient client = createWebClient();
 
     @Test
-    public void simpleGet() throws InterruptedException{
+    void simpleGet() throws InterruptedException{
         this.client.get()
                 .uri("/lec01/product/1")
                 .retrieve()
@@ -23,7 +23,7 @@ public class Lec01MonoTest extends AbstractWebClient {
     }
 
     @Test
-    public void concurrentRequests() throws InterruptedException{
+    void concurrentRequests() throws InterruptedException{
 
         for (int i = 0; i <= 5; i++) {
             this.client.get()
